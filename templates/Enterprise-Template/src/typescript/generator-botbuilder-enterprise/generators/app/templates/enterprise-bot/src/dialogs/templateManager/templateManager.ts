@@ -1,5 +1,7 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
+/**
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License.
+ */
 
 import { TurnContext } from "botbuilder-core";
 import { Activity, ActivityTypes } from "botframework-schema";
@@ -9,10 +11,10 @@ export class TemplateManager {
     private _templateRenderers: ITemplateRenderer[] = [];
     private _languageFallback: string[] = [];
 
-    /// <summary>
-    /// Add a template engine for binding templates
-    /// </summary>
-    /// <param name="renderer"></param>
+    /**
+     * Add a template engine for binding templates
+     * @param {ITemplateRenderer} renderer
+     */
     public register(renderer: ITemplateRenderer): TemplateManager {
         if (!this._templateRenderers.some((x) => x === renderer)) {
             this._templateRenderers.push(renderer);
@@ -21,10 +23,9 @@ export class TemplateManager {
         return this;
     }
 
-    /// <summary>
-    /// List registered template engines
-    /// </summary>
-    /// <returns></returns>
+    /**
+     * List registered template engines
+     */
     public list(): ITemplateRenderer[] {
         return this._templateRenderers;
     }
@@ -37,13 +38,12 @@ export class TemplateManager {
         return this._languageFallback;
     }
 
-    /// <summary>
-    /// Send a reply with the template
-    /// </summary>
-    /// <param name="turnContext"></param>
-    /// <param name="templateId"></param>
-    /// <param name="data"></param>
-    /// <returns></returns>
+    /**
+     * Send a reply with the template
+     * @param {TurnContext} turnContext
+     * @param {string} templateId
+     * @param {any} [data]
+     */
     public async replyWith(turnContext: TurnContext, templateId: string, data?: any): Promise<void> {
         if (!turnContext) { throw new Error("turnContext is null"); }
 
@@ -57,14 +57,13 @@ export class TemplateManager {
         return;
     }
 
-    /// <summary>
-    /// Render the template
-    /// </summary>
-    /// <param name="turnContext"></param>
-    /// <param name="language"></param>
-    /// <param name="templateId"></param>
-    /// <param name="data"></param>
-    /// <returns></returns>
+    /**
+     * Render the template
+     * @param {TurnContext} turnContext
+     * @param {string} templateId
+     * @param {string} [language]
+     * @param {any} data
+     */
     public async renderTemplate(turnContext: TurnContext, templateId: string, language?: string, data?: any): Promise<Activity | undefined> {
         const fallbackLocales = this._languageFallback;
 

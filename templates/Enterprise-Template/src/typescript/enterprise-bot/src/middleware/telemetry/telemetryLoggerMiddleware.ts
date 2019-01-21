@@ -134,6 +134,12 @@ export class TelemetryLoggerMiddleware implements Middleware {
         }
     }
 
+    /**
+     * Fills the Application Insights Custom Event properties for BotMessageReceived.
+     * These properties are logged in the custom event when a new message is received from the user.
+     * @param {Activity} activity - Last activity sent from user.
+     * @returns A dictionary that is sent as "Properties" to Application Insights TrackEvent method for the BotMessageReceived Message.
+     */
     private fillReceiveEventProperties(activity: Activity): { [key: string]: string } {
         const properties: { [key: string]: string } = {};
 
@@ -157,6 +163,12 @@ export class TelemetryLoggerMiddleware implements Middleware {
         return properties;
     }
 
+    /**
+     * Fills the Application Insights Custom Event properties for BotMessageSend.
+     * These properties are logged in the custom event when a response message is sent by the Bot to the user.
+     * @param {Activity} activity - Last activity sent from user.
+     * @returns A dictionary that is sent as "Properties" to Application Insights TrackEvent method for the BotMessageSend Message.
+     */
     private fillSendEventProperties(activity: Activity): { [key: string]: string } {
         const properties: { [key: string]: string } = {};
 
@@ -181,6 +193,14 @@ export class TelemetryLoggerMiddleware implements Middleware {
         return properties;
     }
 
+    /**
+     * Fills the Application Insights Custom Event properties for BotMessageUpdate.
+     * These properties are logged in the custom event when an activity message is updated by the Bot.
+     * For example, if a card is interacted with by the use, and the card needs to be updated to reflect
+     * some interaction.
+     * @param {Activity} activity - Last activity sent from user.
+     * @returns A dictionary that is sent as "Properties" to Application Insights TrackEvent method for the BotMessageUpdate Message.
+     */
     private fillUpdateEventProperties(activity: Activity): { [key: string]: string } {
         const properties: { [key: string]: string } = {};
         properties[TelemetryConstants.ChannelIdProperty] = activity.channelId;
@@ -197,6 +217,12 @@ export class TelemetryLoggerMiddleware implements Middleware {
         return properties;
     }
 
+    /**
+     * Fills the Application Insights Custom Event properties for BotMessageDelete.
+     * These properties are logged in the custom event when an activity message is deleted by the Bot.  This is a relatively rare case.
+     * @param {Activity} activity - Last activity sent from user.
+     * @returns A dictionary that is sent as "Properties" to Application Insights TrackEvent method for the BotMessageDelete Message.
+     */
     private fillDeleteEventProperties(activity: Activity): { [key: string]: string } {
         const properties: { [key: string]: string } = {};
         properties[TelemetryConstants.ChannelIdProperty] = activity.channelId;

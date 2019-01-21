@@ -43,6 +43,12 @@ export class ContentModeratorMiddleware implements Middleware {
         this._cmClient = new ContentModeratorClient(new CognitiveServicesCredentials(subscriptionKey), `https://${region}.api.cognitive.microsoft.com`);
     }
 
+    /**
+     * Analyzes activity text with Content Moderator and adds result to Bot Context. Run on each turn of the conversation.
+     * @param {TurnContext} context - The Bot Context object.
+     * @param {Promise} next - The next middleware component to run.
+     * @returns {Promise} A Promise representing the asynchronous operation.
+     */
     public async onTurn(context: TurnContext, next: () => Promise<void>): Promise<void> {
         
         if (context.activity.type === ActivityTypes.Message) {

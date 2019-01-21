@@ -35,20 +35,22 @@ export class TelemetryLuisRecognizer extends LuisRecognizer {
     }
     /**
      * Gets a value indicating whether determines whether to log the Activity message text that came from the user.
+     * value - If true, will log the Activity Message text into the AppInsights Custom Event for Luis intents.
      */
     public get logOriginalMessage(): boolean { return this._logOriginalMessage; }
 
     /**
      * Gets a value indicating whether determines whether to log the User name.
+     * value - If true, will log the user name into the AppInsights Custom Event for Luis intents.
      */
     public get logUsername(): boolean { return this._logUsername; }
 
     /**
-     * Analyze the current message text and return results of the analysis (Suggested actions and intents).
-     * @param {TurnContext} context Context object containing information for a single turn of conversation with a user.
-     * @param {boolean} logOriginalMessage Determines if the original message is logged into Application Insights. This is a privacy consideration.
+     * Return results of the analysis (Suggested actions and intents), passing the dialog id from dialog context to the TelemetryClient.
+     * @param {DialogContext} dialogContext - Dialog context object containing information for the dialog being executed.
+     * @param {boolean} logOriginalMessage - Determines if the original message is logged into Application Insights.  This is a privacy consideration.
+     * @returns The LUIS results of the analysis of the current message text in the current turn's context activity.
      */
-
     public async RecognizeDialog(dialogContext: DialogContext, logOriginalMessage: boolean = true)
     {
         if (dialogContext === null)
@@ -57,12 +59,24 @@ export class TelemetryLuisRecognizer extends LuisRecognizer {
         }
         return await this.recognizeInternal( dialogContext.context, logOriginalMessage, dialogContext.activeDialog ? dialogContext.activeDialog.id : undefined);
     }
-
+    
+    /**
+     * Return results of the analysis (Suggested actions and intents), using the turn context. This is missing a dialog id used for telemetry.
+     * @param {TurnContext} context - Context object containing information for a single turn of conversation with a user.
+     * @param {boolean} logOriginalMessage - Determines if the original message is logged into Application Insights.  This is a privacy consideration.
+     * @returns The LUIS results of the analysis of the current message text in the current turn's context activity.
+     */
     public async recognizeTurn(context: TurnContext,logOriginalMessage: boolean = true)
     {
         return await this.recognizeInternal(context, logOriginalMessage);
     }
-
+    
+    /**
+     * Analyze the current message text and return results of the analysis (Suggested actions and intents).
+     * @param {TurnContext} context Context object containing information for a single turn of conversation with a user.
+     * @param {boolean} logOriginalMessage Determines if the original message is logged into Application Insights. This is a privacy consideration.
+     * @returns The LUIS results of the analysis of the current message text in the current turn's context activity.
+     */
     private async recognizeInternal(context: TurnContext, logOriginalMessage: boolean = false, dialogId?: string): Promise<RecognizerResult> {
        
         if (context === null) {
